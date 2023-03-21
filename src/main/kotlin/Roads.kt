@@ -4,9 +4,9 @@ typealias RoadRow = List<Roads.Companion.Blocks?>
 typealias RoadGrid = List<RoadRow>
 
 typealias SolvedRoadRow = List<Roads.Companion.Blocks>
-typealias SolvedRowGrid = List<SolvedRoadRow>
+typealias SolvedRoadGrid = List<SolvedRoadRow>
 
-class Roads(override val grid: RoadGrid): GridProblem<Roads.Companion.Blocks, Set<SolvedRowGrid>>() {
+class Roads(override val grid: RoadGrid): GridProblem<Roads.Companion.Blocks, Set<SolvedRoadGrid>>() {
     private val height = grid.size
     private val width = grid.maxOf { it.size }
     override val oneSolution: Boolean = false
@@ -56,11 +56,10 @@ class Roads(override val grid: RoadGrid): GridProblem<Roads.Companion.Blocks, Se
         }
     }.toMap()
 
-    override fun processSolutions(solutions: Set<TileReduction<Pair<Int, Int>, Blocks>>?): Set<SolvedRowGrid> {
+    override fun processSolutions(solutions: Set<TileReduction<Pair<Int, Int>, Blocks>>?): Set<SolvedRoadGrid> {
         if (solutions == null)
             return emptySet()
         return solutions.map {solution ->
-            println(solution)
             (0 until height).map { r ->
                 (0 until width).map { c ->
                     solution.possibilities.getValue(Pair(r, c)).first()
@@ -71,23 +70,23 @@ class Roads(override val grid: RoadGrid): GridProblem<Roads.Companion.Blocks, Se
 
     companion object {
         enum class Blocks(val representation: List<String>) {
-            UP   (listOf(" | ", "---", "   ")),
-            DOWN (listOf("   ", "---", " | ")),
-            RIGHT(listOf(" | ", " |-", " | ")),
-            LEFT (listOf(" | ", "-| ", " | ")),
-            EMPTY(listOf("   ", "   ", "   "))
+            UP   (listOf("  ||  ", "======", "      ")),
+            DOWN (listOf("      ", "======", "  ||  ")),
+            RIGHT(listOf("  ||  ", "  ||==", "  ||  ")),
+            LEFT (listOf("  ||  ", "==||  ", "  ||  ")),
+            EMPTY(listOf("      ", "      ", "      "))
         }
 
-        fun display(solution: SolvedRowGrid) {
+        fun displayAsLetters(solution: SolvedRoadGrid) {
             solution.forEach { row ->
                 row.forEach { b ->
                     print(b.name[0])
                 }
                 println()
             }
-            println()
+        }
 
-
+        fun display(solution: SolvedRoadGrid) {
             solution.forEach { row ->
                 (0 until 3).forEach { idx ->
                     row.forEach { b ->
@@ -96,7 +95,6 @@ class Roads(override val grid: RoadGrid): GridProblem<Roads.Companion.Blocks, Se
                     println()
                 }
             }
-            println()
         }
     }
 }
@@ -119,6 +117,7 @@ fun main() {
     val solutions = Roads(grid).solve()
     solutions.forEach {
         Roads.display(it)
+        println()
         println()
     }
 }

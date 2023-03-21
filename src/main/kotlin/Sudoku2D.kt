@@ -68,9 +68,9 @@ class Sudoku2D(override val grid: Grid, private val size: Int = 3): GridProblem<
     }
 
     companion object {
-        fun display(solution: SolvedGrid) {
+        fun display(solution: SolvedGrid, translate: (Int) -> String = { it.toString() }) {
             solution.forEach { row ->
-                row.forEach { print("$it ") }
+                row.forEach { print("${translate(it)} ") }
                 println()
             }
         }
@@ -134,5 +134,50 @@ fun main() {
 
     Sudoku2D(grid).solve()?.also { solved ->
         Sudoku2D.display(solved)
+    }
+
+    val g = 10
+    val a = 0xa
+    val b = 0xb
+    val c = 0xc
+    val d = 0xd
+    val e = 0xe
+    val f = 0xf
+
+    val bigGrid = listOf(
+        listOf(n, n, n, n, c, n, 7, d, 2, n, 8, n, n, f, n, n),
+        listOf(n, n, 4, n, 8, n, n, n, n, n, n, n, n, 3, 5, n),
+        listOf(1, n, g, n, n, e, n, n, n, d, n, b, a, 9, n, n),
+        listOf(d, 9, 8, n, n, n, 4, 3, 5, a, n, n, g, 2, n, e),
+
+        listOf(9, c, a, n, n, n, 2, n, f, n, n, n, 6, g, n, n),
+        listOf(8, e, n, n, n, d, 9, b, n, n, n, n, n, n, n, n),
+        listOf(n, n, 3, n, 5, n, n, n, n, n, n, n, n, 4, n, n),
+        listOf(f, n, n, n, n, n, n, n, n, n, g, 5, n, n, n, n),
+
+        listOf(n, n, n, 3, n, n, n, 9, n, f, n, n, n, n, 4, n),
+        listOf(n, n, d, n, n, f, n, c, n, n, a, n, 2, 6, n, n),
+        listOf(n, f, n, n, n, a, n, n, b, n, 9, n, 7, n, n, g),
+        listOf(a, b, 6, n, n, n, n, 8, 1, n, 2, n, n, n, d, n),
+
+        listOf(n, n, n, 1, n, n, f, 4, n, n, n, n, n, a, n, d),
+        listOf(n, n, 5, n, g, n, n, n, 4, b, n, 8, e, n, 9, n),
+        listOf(n, n, n, n, 2, n, n, n, a, n, c, n, n, b, 8, n),
+        listOf(2, 8, n, 4, n, 7, n, e, 6, g, d, n, n, n, n, n)
+    )
+    println()
+
+    Sudoku2D(bigGrid, size = 4).solve()?.also { solution ->
+        Sudoku2D.display(solution, translate = { n -> when {
+            n < 10 -> n.toString()
+            n == 10 -> "G"
+            n == 11 -> "A"
+            n == 12 -> "B"
+            n == 13 -> "C"
+            n == 14 -> "D"
+            n == 15 -> "E"
+            n == 16 -> "F"
+            else -> "X"
+        } })
     }
 }
