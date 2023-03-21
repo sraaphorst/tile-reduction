@@ -136,48 +136,49 @@ fun main() {
         Sudoku2D.display(solved)
     }
 
-    val g = 10
     val a = 0xa
     val b = 0xb
     val c = 0xc
     val d = 0xd
     val e = 0xe
     val f = 0xf
+    val g = 0x10
 
-    val bigGrid = listOf(
-        listOf(n, n, n, n, c, n, 7, d, 2, n, 8, n, n, f, n, n),
-        listOf(n, n, 4, n, 8, n, n, n, n, n, n, n, n, 3, 5, n),
-        listOf(1, n, g, n, n, e, n, n, n, d, n, b, a, 9, n, n),
-        listOf(d, 9, 8, n, n, n, 4, 3, 5, a, n, n, g, 2, n, e),
+    val big = listOf(
+        listOf(n, a, 3, 4, 7, b, n, n, 1, 9, e, n, n, 8, n, n),
+        listOf(c, 6, e, 7, n, n, n, 1, n, 5, b, 2, n, 9, n, n),
+        listOf(n, n, b, n, n, 6, n, 8, n, n, 4, d, 5, n, n, f),
+        listOf(1, n, n, n, 9, n, g, n, c, n, f, 3, 4, e, n, n),
 
-        listOf(9, c, a, n, n, n, 2, n, f, n, n, n, 6, g, n, n),
-        listOf(8, e, n, n, n, d, 9, b, n, n, n, n, n, n, n, n),
-        listOf(n, n, 3, n, 5, n, n, n, n, n, n, n, n, 4, n, n),
-        listOf(f, n, n, n, n, n, n, n, n, n, g, 5, n, n, n, n),
+        listOf(n, n, g, n, f, n, n, 5, n, n, a, 7, n, b, 8, n),
+        listOf(6, 7, a, n, g, n, n, n, n, n, n, c, n, n, 5, 9),
+        listOf(5, n, n, n, n, n, n, 9, b, 3, n, n, n, g, n, e),
+        listOf(e, 3, 2, 8, d, n, a, b, 5, 1, n, 9, n, n, f, n),
 
-        listOf(n, n, n, 3, n, n, n, 9, n, f, n, n, n, n, 4, n),
-        listOf(n, n, d, n, n, f, n, c, n, n, a, n, 2, 6, n, n),
-        listOf(n, f, n, n, n, a, n, n, b, n, 9, n, 7, n, n, g),
-        listOf(a, b, 6, n, n, n, n, 8, 1, n, 2, n, n, n, d, n),
+        listOf(2, n, n, n, 8, n, c, n, 4, n, n, f, n, 3, 6, n),
+        listOf(3, b, n, 1, n, n, n, 7, n, n, n, n, 9, f, 4, 2),
+        listOf(n, n, 7, n, b, 4, n, f, n, 2, 5, 6, n, n, n, g),
+        listOf(9, n, 4, f, n, 2, 3, n, 7, d, n, n, n, n, b, n),
 
-        listOf(n, n, n, 1, n, n, f, 4, n, n, n, n, n, a, n, d),
-        listOf(n, n, 5, n, g, n, n, n, 4, b, n, 8, e, n, 9, n),
-        listOf(n, n, n, n, 2, n, n, n, a, n, c, n, n, b, 8, n),
-        listOf(2, 8, n, 4, n, 7, n, e, 6, g, d, n, n, n, n, n)
+        listOf(8, 2, 1, g, c, n, 7, e, d, 4, 3, b, n, n, a, 6),
+        listOf(n, e, n, n, 5, 8, n, n, n, n, n, a, n, 1, n, 3),
+        listOf(7, f, 5, n, a, g, b, n, e, n, 2, n, n, n, n, n),
+        listOf(4, d, n, a, 1, n, 2, n, n, n, n, 5, b, 7, n, c)
     )
     println()
-
-    Sudoku2D(bigGrid, size = 4).solve()?.also { solution ->
-        Sudoku2D.display(solution, translate = { n -> when {
-            n < 10 -> n.toString()
-            n == 10 -> "G"
-            n == 11 -> "A"
-            n == 12 -> "B"
-            n == 13 -> "C"
-            n == 14 -> "D"
-            n == 15 -> "E"
-            n == 16 -> "F"
-            else -> "X"
-        } })
+    Sudoku2D(big, size = 4).solve()?.also { solution ->
+        Sudoku2D.display(solution, translate = { n ->
+            when {
+                n < 10 -> n.toString()
+                n == 10 -> "G"
+                n == 11 -> "A"
+                n == 12 -> "B"
+                n == 13 -> "C"
+                n == 14 -> "D"
+                n == 15 -> "E"
+                n == 16 -> "F"
+                else -> "X"
+            }
+        })
     }
 }
