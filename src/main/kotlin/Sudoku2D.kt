@@ -169,14 +169,14 @@ fun main() {
     Sudoku2D(big, size = 4).solve()?.also { solution ->
         Sudoku2D.display(solution, translate = { n ->
             when {
-                n < 10 -> n.toString()
-                n == 10 -> "G"
-                n == 11 -> "A"
-                n == 12 -> "B"
-                n == 13 -> "C"
-                n == 14 -> "D"
-                n == 15 -> "E"
-                n == 16 -> "F"
+                n < 0xa -> n.toString()
+                n == 0xa -> "A"
+                n == 0xb -> "B"
+                n == 0xc -> "C"
+                n == 0xd -> "D"
+                n == 0xe -> "E"
+                n == 0xf -> "F"
+                n == 0x10 -> "G"
                 else -> "X"
             }
         })
