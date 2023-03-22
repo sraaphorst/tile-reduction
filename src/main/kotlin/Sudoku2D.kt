@@ -1,8 +1,4 @@
-typealias Row = List<Int?>
-typealias Grid = List<Row>
-
-typealias SolvedRow = List<Int>
-typealias SolvedGrid = List<SolvedRow>
+// By Sebastian Raaphorst, 2023.
 
 class Sudoku2D(override val grid: Grid, private val size: Int = 3): GridProblem<Int, SolvedGrid?>() {
     private val size2 = size * size
@@ -42,7 +38,7 @@ class Sudoku2D(override val grid: Grid, private val size: Int = 3): GridProblem<
         tilePossibilitySet.map { s ->
             val possibilities = tileSet.associateWith { tp ->
                 val (rp, cp) = tp
-                val set = run {
+                run {
                     if (r == rp && c == cp)
                         setOf(s)
                     else if (r == rp || c == cp)
@@ -52,7 +48,6 @@ class Sudoku2D(override val grid: Grid, private val size: Int = 3): GridProblem<
                     else
                         tilePossibilitySet
                 }.toSet()
-                set
             }
             Pair(t, s) to possibilities
         }
@@ -119,17 +114,17 @@ fun main() {
      * +-------+-------+-------+
      */
     val grid = listOf(
-        listOf(1, n, n,    3, n, 4,    8, n, 9),
-        listOf(n, 2, 4,    n, n, n,    n, n, 7),
-        listOf(n, n, n,    9, 6, n,    5, n, n),
+        listOf(1, n, n, 3, n, 4, 8, n, 9),
+        listOf(n, 2, 4, n, n, n, n, n, 7),
+        listOf(n, n, n, 9, 6, n, 5, n, n),
 
-        listOf(2, 3, n,    n, n, n,    n, 5, n),
-        listOf(5, n, 7,    n, n, 8,    n, n, n),
-        listOf(n, n, n,    n, n, n,    4, n, n),
+        listOf(2, 3, n, n, n, n, n, 5, n),
+        listOf(5, n, 7, n, n, 8, n, n, n),
+        listOf(n, n, n, n, n, n, 4, n, n),
 
-        listOf(n, n, 9,    5, n, n,    n, n, n),
-        listOf(3, n, n,    8, n, n,    n, n, n),
-        listOf(n, 5, n,    6, n, n,    n, 3, n)
+        listOf(n, n, 9, 5, n, n, n, n, n),
+        listOf(3, n, n, 8, n, n, n, n, n),
+        listOf(n, 5, n, 6, n, n, n, 3, n)
     )
 
     Sudoku2D(grid).solve()?.also { solved ->

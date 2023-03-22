@@ -1,3 +1,8 @@
+// By Sebastian Raaphorst, 2023.
+
+// Note that we call this a "Tile Reduction" problem, but any graph would do, where the nodes would be considered
+// the "tiles."
+
 // We need:
 // A tile placement identifier type, T.
 // A type of tile, S.
@@ -6,6 +11,8 @@
 typealias Assignment<T, S> = Pair<T, S>
 typealias Possibilities<T, S> = Map<T, Set<S>>
 typealias Rules<T, S> = Map<Assignment<T, S>, Possibilities<T, S>>
+
+// Keep track of which cells are fixed so when picking a cell of lowest entropy, we do not pick a fixed cell.
 typealias Fixed<T> = Map<T, Boolean>
 
 data class TileReduction<T, S>(
@@ -50,7 +57,7 @@ data class TileReduction<T, S>(
      * every tile has exactly one value associated with it.
      */
     val complete: Boolean by lazy {
-        !possibilities.asSequence().filter { it.value.size != 1 }.any()
+        possibilities.asSequence().all { it.value.size == 1 }
     }
 
     /**
