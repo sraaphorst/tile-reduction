@@ -288,6 +288,8 @@ The algorithm finds the unique solution:
 7 5 2 6 4 9 1 3 8
 ```
 
+[Back to Top](#tile-reduction)
+
 
 ## Larger Sudoku
 
@@ -333,6 +335,8 @@ B E C 6 5 8 4 D 9 F 7 A 2 1 0 3
 7 F 5 3 A 0 B 6 E C 2 1 D 4 9 8 
 4 D 9 A 1 F 2 3 6 0 8 5 B 7 E C
 ```
+
+[Back to Top](#tile-reduction)
 
 
 ## Sudoku Cubes and Hypercubes
@@ -432,3 +436,5 @@ The algorithm finds the unique solution:
 3 6 1 2 7 8 5 4                5 4 3 6 1 2 7 8 
 1 2 3 8 5 4 7 6                7 6 5 2 3 8 1 4 
 ```
+
+[Back to Top](#tile-reduction)
