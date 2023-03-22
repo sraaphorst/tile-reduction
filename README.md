@@ -254,6 +254,7 @@ the following 12 solutions are output:
 ........||..........||........
 ```
 
+[Back to Top](#tile-reduction)
 
 ## Sudoku
 
