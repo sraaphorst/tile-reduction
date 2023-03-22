@@ -70,11 +70,11 @@ class Roads(override val grid: RoadGrid): GridProblem<Roads.Companion.Blocks, Se
 
     companion object {
         enum class Blocks(val representation: List<String>) {
-            UP   (listOf("  ||  ", "======", "      ")),
-            DOWN (listOf("      ", "======", "  ||  ")),
-            RIGHT(listOf("  ||  ", "  ||==", "  ||  ")),
-            LEFT (listOf("  ||  ", "==||  ", "  ||  ")),
-            EMPTY(listOf("      ", "      ", "      "))
+            UP   (listOf("..||..", "======", "......")),
+            DOWN (listOf("......", "======", "..||..")),
+            RIGHT(listOf("..||..", "..||==", "..||..")),
+            LEFT (listOf("..||..", "==||..", "..||..")),
+            EMPTY(listOf("......", "......", "......"))
         }
 
         fun displayAsLetters(solution: SolvedRoadGrid) {
