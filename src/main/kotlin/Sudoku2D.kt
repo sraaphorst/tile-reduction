@@ -3,6 +3,7 @@
 class Sudoku2D(override val grid: Grid, private val size: Int = 3): GridProblem<Int, SolvedGrid?>() {
     private val size2 = size * size
     override val oneSolution: Boolean = true
+    override val stochastic: Boolean = false
 
     override val tileSet = (0 until size2).flatMap { row ->
         (0 until size2).map { col ->

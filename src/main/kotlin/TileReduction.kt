@@ -1,3 +1,5 @@
+import kotlin.streams.asStream
+
 // By Sebastian Raaphorst, 2023.
 
 // Note that we call this a "Tile Reduction" problem, but any graph would do, where the nodes would be considered
@@ -66,7 +68,7 @@ data class TileReduction<T, S>(
      * If first is false, we return the full set of TileReduction that satisfies if there are any.
      * If there are no answers, null is returned.
      */
-    fun backtrack(first: Boolean): Set<TileReduction<T, S>>? {
+    fun backtrack(first: Boolean, stochastic: Boolean = false): Set<TileReduction<T, S>>? {
         /**
          * The parameters should be:
          * 1. the tileIdx we are currently processing
@@ -79,33 +81,46 @@ data class TileReduction<T, S>(
             // Find the list of empty tiles.
             val emptyTiles = currentBoard.fixed.filterValues { !it }.keys
 
+            // If the lowest entropy of the puzzle is 0, we have made a mistake somewhere.
+            if (currentBoard.possibilities.any { it.value.isEmpty() })
+                return null
+
             // If there are no empty tiles, then we have a complete board.
             if (emptyTiles.isEmpty())
                 return setOf(currentBoard)
 
-            // Pick the first tile of the lowest entropy to try next.
-            // If the entropy is 0, we have reached a dead end and have to backtrack.
-            val lowestEntropy = emptyTiles.minOfOrNull { t -> currentBoard.possibilities.getValue(t).size } ?: 0
-            if (lowestEntropy == 0)
-                return null
+            // Pick the first unfixed tile of the lowest entropy to try next.
+            val lowestEntropy = emptyTiles.minOf { t -> currentBoard.possibilities.getValue(t).size }
 
-            val lowestEntropyPossibilities = currentBoard.possibilities.asSequence()
-                .filter { (t, p) -> t in emptyTiles && p.size == lowestEntropy }
-                .first()
+            val lowestEntropyPossibilities = if (stochastic)
+                currentBoard.possibilities.asSequence()
+                    .filter { (t, p) -> t in emptyTiles && p.size == lowestEntropy }
+                    .shuffled()
+                    .first()
+            else
+                currentBoard.possibilities.asSequence()
+                    .filter { (t, p) -> t in emptyTiles && p.size == lowestEntropy }
+                    .first()
 
             val t = lowestEntropyPossibilities.key
-            val ps = currentBoard.possibilities.getValue(t)
+            val ps = if (stochastic)
+                currentBoard.possibilities.getValue(t).shuffled()
+            else
+                currentBoard.possibilities.getValue(t)
 
             return if (first)
                 ps.asSequence()
                     .mapNotNull { s ->
                         aux(currentBoard.fix(t, s))
                     }.firstOrNull()
+//                ps.asSequence()
+//                    .asStream().map { s ->
+//                        aux(currentBoard.fix(t, s))
+//                    }.filter { it != null }.findAny().orElseGet(null)
             else
-                // We continue through all possible values.
                 ps.fold(emptySet()) { set, s ->
                     val newBoard = currentBoard.fix(t, s)
-                    set + (aux(newBoard)?.toList() ?: emptySet())
+                    set + (aux(newBoard) ?: emptySet())
                 }
         }
 

@@ -6,6 +6,8 @@ abstract class GridProblem<S, R> {
     protected abstract val tileSet: Set<Pair<Int, Int>>
     protected abstract val tilePossibilitySet: Set<S>
     protected abstract val oneSolution: Boolean
+    protected abstract val stochastic: Boolean
+
     protected abstract fun processSolutions(solutions: Set<TileReduction<Pair<Int, Int>, S>>?): R
 
     fun solve(): R {
@@ -28,7 +30,7 @@ abstract class GridProblem<S, R> {
         }
 
         // Solve via backtracking.
-        val solutions = fixedTileReduction.backtrack(oneSolution)
+        val solutions = fixedTileReduction.backtrack(oneSolution, stochastic)
         return processSolutions(solutions)
     }
 }

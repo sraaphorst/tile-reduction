@@ -10,6 +10,7 @@ class Roads(override val grid: RoadGrid): GridProblem<Roads.Companion.Blocks, Se
     private val height = grid.size
     private val width = grid.maxOf { it.size }
     override val oneSolution: Boolean = false
+    override val stochastic: Boolean = false
 
     override val tileSet = (0 until height).flatMap { row ->
         (0 until width).map { col ->
@@ -59,7 +60,7 @@ class Roads(override val grid: RoadGrid): GridProblem<Roads.Companion.Blocks, Se
     override fun processSolutions(solutions: Set<TileReduction<Pair<Int, Int>, Blocks>>?): Set<SolvedRoadGrid> {
         if (solutions == null)
             return emptySet()
-        return solutions.map {solution ->
+        return solutions.map { solution ->
             (0 until height).map { r ->
                 (0 until width).map { c ->
                     solution.possibilities.getValue(Pair(r, c)).first()
