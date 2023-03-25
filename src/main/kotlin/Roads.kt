@@ -7,13 +7,14 @@ typealias SolvedRoadRow = List<Roads.Companion.Blocks>
 typealias SolvedRoadGrid = List<SolvedRoadRow>
 
 class Roads(override val grid: RoadGrid): GridProblem<Roads.Companion.Blocks, Set<SolvedRoadGrid>>() {
-    private val height = grid.size
-    private val width = grid.maxOf { it.size }
+    private val rows = grid.size
+    private val cols = grid.maxOf { it.size }
+    private val processor = GenerationProcessing<Blocks>(rows, cols)
     override val oneSolution: Boolean = false
     override val stochastic: Boolean = false
 
-    override val tileSet = (0 until height).flatMap { row ->
-        (0 until width).map { col ->
+    override val tileSet = (0 until rows).flatMap { row ->
+        (0 until cols).map { col ->
             Pair(row, col)
         }
     }.toSet()
@@ -21,11 +22,11 @@ class Roads(override val grid: RoadGrid): GridProblem<Roads.Companion.Blocks, Se
     override val tilePossibilitySet = Blocks.values().toSet()
 
     init {
-        if (height < 1)
-            throw IllegalArgumentException("Height was $height, must be at least 1.")
+        if (rows < 1)
+            throw IllegalArgumentException("Height was $rows, must be at least 1.")
 
         val minWidth = grid.minOf { it.size }
-        if (width < 1 || minWidth < width)
+        if (cols < 1 || minWidth < cols)
             throw IllegalArgumentException("Illegal widths found: must all be consistent and at least 1.")
     }
 
@@ -57,17 +58,8 @@ class Roads(override val grid: RoadGrid): GridProblem<Roads.Companion.Blocks, Se
         }
     }.toMap()
 
-    override fun processSolutions(solutions: Set<TileReduction<Pair<Int, Int>, Blocks>>?): Set<SolvedRoadGrid> {
-        if (solutions == null)
-            return emptySet()
-        return solutions.map { solution ->
-            (0 until height).map { r ->
-                (0 until width).map { c ->
-                    solution.possibilities.getValue(Pair(r, c)).first()
-                }
-            }
-        }.toSet()
-    }
+    override fun processSolutions(solutions: Set<TileReduction<Pair<Int, Int>, Blocks>>?): Set<SolvedRoadGrid> =
+        processor.processSolutions(solutions)
 
     companion object {
         enum class Blocks(val representation: List<String>) {

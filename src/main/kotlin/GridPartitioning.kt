@@ -4,28 +4,19 @@ typealias GridPartition = List<RowPartition>
 typealias SolvedRowPartition = List<GridPartitioning.Companion.Paths>
 typealias SolvedGridPartition = List<SolvedRowPartition>
 
-class GridPartitioning(private val rows: Int, private val cols: Int,
-                       override val grid: GridPartition = (0 until rows).map { x -> (0 until cols).map { y ->
-                     // Fix the corners.
-                     if (x == 0 && y == 0) Paths.SOUTHEAST
-                     else if (x == 0 && y == cols - 1) Paths.SOUTHWEST
-                     else if (x == rows - 1 && y == 0) Paths.NORTHEAST
-                     else if (x == rows - 1 && y == cols - 1) Paths.NORTHWEST
-                     else null
-                 } }):
-    GridProblem<GridPartitioning.Companion.Paths, Set<SolvedGridPartition>>() {
+abstract class GridPartitioning<R>(
+    private val rows: Int,
+    private val cols: Int
+): GridProblem<GridPartitioning.Companion.Paths, R>() {
 
-    override val oneSolution: Boolean = false
-    override val stochastic: Boolean = false
-
-    override val tileSet = (0 until rows).flatMap { x ->
+    final override val tileSet = (0 until rows).flatMap { x ->
         (0 until cols).map { y ->
             Pair(x, y)
         }
     }.toSet()
-    override val tilePossibilitySet = Paths.values().toSet()
+    final override val tilePossibilitySet = Paths.values().toSet()
 
-    override val rules = tileSet.flatMap { t ->
+    final override val rules = tileSet.flatMap { t ->
         val (x, y) = t
         tilePossibilitySet.map { s ->
             val possibilities = tileSet.associateWith { tp ->
@@ -98,18 +89,6 @@ class GridPartitioning(private val rows: Int, private val cols: Int,
         }
     }.toMap()
 
-    override fun processSolutions(solutions: Set<TileReduction<Pair<Int, Int>, Paths>>?): Set<SolvedGridPartition> {
-        if (solutions == null)
-            return emptySet()
-        return solutions.map { solution ->
-            (0 until rows).map { x ->
-                (0 until cols).map { y ->
-                    solution.possibilities.getValue(Pair(x, y)).first()
-                }
-            }
-        }.toSet()
-    }
-
     companion object {
         enum class Paths(val representation: Char) {
             VERTICAL('║'),
@@ -119,6 +98,17 @@ class GridPartitioning(private val rows: Int, private val cols: Int,
             NORTHWEST('╝'),
             SOUTHEAST('╔')
         }
+        fun defaultSeed(rows: Int, cols: Int): GridPartition =
+            (0 until rows).map { x ->
+                (0 until cols).map { y ->
+                    // Fix the corners.
+                    if (x == 0 && y == 0) Paths.SOUTHEAST
+                    else if (x == 0 && y == cols - 1) Paths.SOUTHWEST
+                    else if (x == rows - 1 && y == 0) Paths.NORTHEAST
+                    else if (x == rows - 1 && y == cols - 1) Paths.NORTHWEST
+                    else null
+                }
+            }
 
         fun display(solution: SolvedGridPartition) {
             solution.forEach { row ->
@@ -128,15 +118,5 @@ class GridPartitioning(private val rows: Int, private val cols: Int,
                 println()
             }
         }
-
     }
-}
-
-fun main() {
-    GridPartitioning(5, 4).solve()
-        .also { println("${it.size} solutions:\n") }
-        .forEach { solution ->
-            GridPartitioning.display(solution)
-            println()
-        }
 }
