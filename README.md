@@ -188,8 +188,8 @@ The algorithm finds the unique solution:
 
 ## Larger Sudoku
 
-For any `k ≥ 1`, a `k^2 x k^2` Sudoku board exists over `k^2` symbols with the expected properties of the `k = 3`
-typical Sudoku board. Here is a `k = 4` seed for a `16 x 16` board which we represent using hexadecimal:
+For any `k ≥ 1`, a `k^2 × k^2` Sudoku board exists over `k^2` symbols with the expected properties of the `k = 3`
+typical Sudoku board. Here is a `k = 4` seed for a `16 × 16` board which we represent using hexadecimal:
 
 ```text
 _ A 3 4 7 B _ _ 1 9 E _ _ 8 _ _
@@ -243,7 +243,7 @@ For an integer `k ≥ 1` and `n ≥ 1`, an analogous Sudoku cube (hypercube) exi
  - Each of the `((k^n)^n)/(k^n)) = (k^n)^(n-1)` sub-cubes (sub-hypercubes) of side `k` in the standard way contain include the `k^n` symbols exactly once
 
 The smallest example that deviates from a normal Sudoku grid has parameters `k=2`, `n=3`, which gives us a cube
-of size `2^3` on each axis, so an `8 x 8 x 8` cube, which contains 512 cells and 64 subcubes.
+of size `2^3` on each axis, so an `8 × 8 × 8` cube, which contains 512 cells and 64 subcubes.
 
 To represent the problem, we demonstrate it as eight grids to be stacked on top of each other, from top-to-bottom,
 and left-to-right:
@@ -338,10 +338,14 @@ The algorithm finds the unique solution:
 # Grid Partitioning
 
 Given an `m × n` grid where the corners are set so that the partitioning is closed, the
-algorithm can perform a generation of all the partitions of the grid, or search for the first
-random partition.
+algorithm can perform a generation of all partitions of an `(m-1) × (n-1)` grid, or stochastically search for the first
+random partition, by tiling the larger grid with:
 
-Here are three partitions of an `8 × 8` grid.
+* the four corner tiles `" ┏━"`, `"━┓ "`, `" ┗━"`, and `"━┛ "`;
+* the vertical tile `" ┃ "`; and
+* the horizontal tile `"━━━"`.
+
+Here are four partitions of an `7 × 7` grid.
 
 ```text
  ┏━━┓  ┏━━┓  ┏━━┓  ┏━━┓ 
@@ -366,6 +370,17 @@ Here are three partitions of an `8 × 8` grid.
 ```
 
 ```text
+ ┏━━━━━━━━━━━┓  ┏━━━━━┓ 
+ ┗━━━━━━━━┓  ┗━━┛  ┏━━┛ 
+ ┏━━━━━┓  ┃  ┏━━┓  ┗━━┓ 
+ ┗━━┓  ┗━━┛  ┃  ┗━━┓  ┃ 
+ ┏━━┛  ┏━━┓  ┃  ┏━━┛  ┃ 
+ ┗━━┓  ┃  ┃  ┗━━┛  ┏━━┛ 
+ ┏━━┛  ┃  ┃  ┏━━┓  ┗━━┓ 
+ ┗━━━━━┛  ┗━━┛  ┗━━━━━┛ 
+```
+
+```text
  ┏━━━━━┓  ┏━━━━━┓  ┏━━┓ 
  ┗━━┓  ┃  ┗━━┓  ┃  ┃  ┃ 
  ┏━━┛  ┗━━┓  ┗━━┛  ┃  ┃ 
@@ -379,7 +394,7 @@ Here are three partitions of an `8 × 8` grid.
 Note that there is no set of rules that can force the algorithm to find a random Hamiltonian cycle, although it is
 simple to take a partitioning and turn it into a Hamiltonian cycle by modifying the components to be connected.
 
-For example, the third partitioning above can be modified:
+For example, the previous partitioning above can be modified as followed:
 
 ```text
  ┏━━━━━━━━━━━━━━┓  ┏━━┓ 
@@ -392,7 +407,21 @@ For example, the third partitioning above can be modified:
  ┗━━━━━━━━━━━━━━┛  ┗━━┛ 
 ```
 
-Here are the 54 solutions for a `5 × 4` grid:
+The algorithm can also accept a seed for the partitioning as per the other examples above.
+In this partioning of an `8 × 8` grid, a border is specified around the perimeter.
+
+```text
+ ┏━━━━━━━━━━━━━━━━━━━━┓ 
+ ┃  ┏━━━━━━━━┓  ┏━━┓  ┃ 
+ ┃  ┗━━━━━┓  ┗━━┛  ┃  ┃ 
+ ┃  ┏━━┓  ┃  ┏━━━━━┛  ┃ 
+ ┃  ┃  ┃  ┗━━┛  ┏━━┓  ┃ 
+ ┃  ┃  ┗━━┓  ┏━━┛  ┃  ┃ 
+ ┃  ┗━━━━━┛  ┗━━━━━┛  ┃ 
+ ┗━━━━━━━━━━━━━━━━━━━━┛ 
+```
+
+Here are the 54 solutions for a `4 × 3` grid using a tiling of a `5 × 4` grid:
 
 ```text
  ┏━━━━━━━━┓ 
