@@ -63,11 +63,20 @@ class Roads(override val grid: RoadGrid): GridProblem<Roads.Companion.Blocks, Se
 
     companion object {
         enum class Blocks(val representation: List<String>) {
-            UP   (listOf("..||..", "======", "......")),
-            DOWN (listOf("......", "======", "..||..")),
-            RIGHT(listOf("..||..", "..||==", "..||..")),
-            LEFT (listOf("..||..", "==||..", "..||..")),
-            EMPTY(listOf("......", "......", "......"))
+//            UP   (listOf("..||..", "======", "......")),
+//            DOWN (listOf("......", "======", "..||..")),
+//            RIGHT(listOf("..||..", "..||==", "..||..")),
+//            LEFT (listOf("..||..", "==||..", "..||..")),
+//            EMPTY(listOf("......", "......", "......"))
+            UP   (listOf("━┻━")),
+            DOWN (listOf("━┳━")),
+            RIGHT(listOf(" ┣━")),
+            LEFT (listOf("━┫ ")),
+            EMPTY(listOf("░░░"));
+            companion object {
+//                const val RepresentationLength = 3
+                const val RepresentationLength = 1
+            }
         }
 
         fun displayAsLetters(solution: SolvedRoadGrid) {
@@ -81,7 +90,7 @@ class Roads(override val grid: RoadGrid): GridProblem<Roads.Companion.Blocks, Se
 
         fun display(solution: SolvedRoadGrid) {
             solution.forEach { row ->
-                (0 until 3).forEach { idx ->
+                (0 until Blocks.RepresentationLength).forEach { idx ->
                     row.forEach { b ->
                         print(b.representation[idx])
                     }

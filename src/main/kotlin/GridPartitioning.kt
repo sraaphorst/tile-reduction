@@ -90,13 +90,19 @@ abstract class GridPartitioning<R>(
     }.toMap()
 
     companion object {
-        enum class Paths(val representation: Char) {
-            VERTICAL('║'),
-            HORIZONTAL('═'),
-            NORTHEAST('╚'),
-            SOUTHWEST('╗'),
-            NORTHWEST('╝'),
-            SOUTHEAST('╔')
+        enum class Paths(val representation: String) {
+//            VERTICAL('║'),
+//            HORIZONTAL('═'),
+//            NORTHEAST('╚'),
+//            SOUTHWEST('╗'),
+//            NORTHWEST('╝'),
+//            SOUTHEAST('╔')
+            VERTICAL  (" ┃ "),
+            HORIZONTAL("━━━"),
+            NORTHEAST (" ┗━"),
+            SOUTHWEST ("━┓ "),
+            NORTHWEST ("━┛ "),
+            SOUTHEAST (" ┏━")
         }
         fun defaultSeed(rows: Int, cols: Int): GridPartition =
             (0 until rows).map { x ->
